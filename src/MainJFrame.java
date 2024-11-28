@@ -28,84 +28,36 @@ import javax.swing.SwingConstants;
  * @author jun
  */
 public class MainJFrame extends javax.swing.JFrame {
+    CaptCha cap = new CaptCha(); // 캡챠 기능 수행 
+    String strSQL = ""; // 쿼리 작성 변수
+    
+    DB_MAN DBM = new DB_MAN();
 
+    
+    
     /**
      * Creates new form MainJFrame
      */
     public MainJFrame() {
         initComponents();
-        generateCaptcha();
-    }
-    
-    private void generateCaptcha() {
-        // 캡차 텍스트 생성
-        String captchaText = generateRandomText(6);
-
-        // 캡차 이미지를 생성
-        BufferedImage captchaImage = generateCaptchaImage(captchaText);
-
-        // JLabel에 캡차 이미지 설정
-        lblImg.setIcon(new ImageIcon(captchaImage));
-       
-    }
-
-    /**
-     * 랜덤한 텍스트를 생성
-     */
-    private String generateRandomText(int length) {
-        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        StringBuilder text = new StringBuilder();
-        Random random = new Random();
-
-        for (int i = 0; i < length; i++) {
-            text.append(chars.charAt(random.nextInt(chars.length())));
+        cap.generateCaptcha(lblImg); // 캡챠 이미지 만들어 넣음  
+        btnLogin.setEnabled(false);  // 로그인버튼 캡챠 인증 전에는 안 열리게 구현
+        
+        // db 조회 메서드. 일단 중지
+        try {
+            DBM.dbOpen();
+//            getDBData(strSQL);
+            DBM.dbClose();
+        } catch (Exception e) {
+            System.err.println("SQLException : " + e.getMessage());
         }
         
-        return text.toString();
     }
+    
+    
+    
 
-    /**
-     * 텍스트를 이미지로 변환
-     */
-    private BufferedImage generateCaptchaImage(String text) {
-        int width = 300;  // 캡차 이미지 가로 크기
-        int height = 80;  // 캡차 이미지 세로 크기
-
-        // BufferedImage 생성
-        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g2d = image.createGraphics();
-
-        // 배경색 설정
-        g2d.setColor(Color.WHITE);
-        g2d.fillRect(0, 0, width, height);
-
-        // 폰트 설정
-        g2d.setFont(new Font("Arial", Font.BOLD, 30));
-
-        // 텍스트 색상 및 위치 설정
-        Random random = new Random();
-        for (int i = 0; i < text.length(); i++) {
-            g2d.setColor(new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
-            int x = 20 + i * 30;
-            int y = 30 + random.nextInt(10);
-            g2d.drawString(String.valueOf(text.charAt(i)), x, y);
-        }
-
-        // 노이즈 추가
-        for (int i = 0; i < 15; i++) {
-            g2d.setColor(new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
-            int x1 = random.nextInt(width);
-            int y1 = random.nextInt(height);
-            int x2 = random.nextInt(width);
-            int y2 = random.nextInt(height);
-            g2d.drawLine(x1, y1, x2, y2);
-        }
-
-        g2d.dispose();
-        return image;
-    }
-
-    // 여기에 추가적인 버튼이나 액션으로 캡차를 새로고침하는 이벤트를 추가 가능
+// 여기에 추가적인 버튼이나 액션으로 캡차를 새로고침하는 이벤트를 추가 가능
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -117,49 +69,60 @@ public class MainJFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        jOptionPane1 = new javax.swing.JOptionPane();
+        lblInput = new javax.swing.JLabel();
+        lblName = new javax.swing.JLabel();
+        lblBirth = new javax.swing.JLabel();
+        txtName = new javax.swing.JTextField();
+        txtBirth = new javax.swing.JTextField();
         lblImg = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        lblcap = new javax.swing.JLabel();
+        btnRe = new javax.swing.JButton();
+        btnAuth = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
+        txtauth = new javax.swing.JTextField();
+        btnLogin = new javax.swing.JButton();
 
         jLabel1.setText("jLabel1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel2.setText("회원 정보 입력");
+        lblInput.setText("회원 정보 입력");
 
-        jLabel4.setText("이름 :");
+        lblName.setText("이름 :");
 
-        jLabel5.setText("생년월일 :");
+        lblBirth.setText("생년월일 :");
 
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        txtBirth.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                txtBirthActionPerformed(evt);
             }
         });
 
         lblImg.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jLabel3.setText("자동 등록 방지를 위해 이미지에 나타난 문자를 입력하세요.");
+        lblcap.setText("자동 등록 방지를 위해 이미지에 나타난 문자를 입력하세요.");
 
-        jButton1.setText("새로고침");
+        btnRe.setText("새로고침");
+        btnRe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("인증");
+        btnAuth.setText("인증");
+        btnAuth.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAuthActionPerformed(evt);
+            }
+        });
 
         jLabel6.setText("(8자로 입력)");
 
-        jButton3.setText("로그인");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnLogin.setText("로그인");
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnLoginActionPerformed(evt);
             }
         });
 
@@ -171,19 +134,19 @@ public class MainJFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(55, 55, 55)
-                        .addComponent(jLabel3))
+                        .addComponent(lblcap))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(90, 90, 90)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblInput, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel4))
+                                    .addComponent(lblBirth)
+                                    .addComponent(lblName))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTextField1)
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(txtName)
+                                    .addComponent(txtBirth, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel6)))
                 .addContainerGap(49, Short.MAX_VALUE))
@@ -192,57 +155,92 @@ public class MainJFrame extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE)
+                            .addComponent(txtauth, javax.swing.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE)
                             .addComponent(lblImg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnAuth, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton1)))
+                                .addComponent(btnRe)))
                         .addGap(49, 49, 49))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton3)
+                        .addComponent(btnLogin)
                         .addGap(174, 174, 174))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(11, 11, 11)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblInput, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblName)
+                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblBirth)
+                    .addComponent(txtBirth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
+                .addComponent(lblcap)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblImg, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(btnRe)
+                    .addComponent(btnAuth))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtauth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton3)
+                .addComponent(btnLogin)
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void txtBirthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBirthActionPerformed
         // TODO add your handling code here:
         
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_txtBirthActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+        String nameValue = lblName.getText();
+        String birthValue = lblBirth.getText();
+       
+
+        if (DBM.isValidUser(nameValue, birthValue)) {
+            // 데이터 끌고와서 보내주는 코드 필요
+            // HomeJFrame 열기
+            HomeJFrame homeFrame = new HomeJFrame();
+            homeFrame.setVisible(true);
+
+            // 현재 프레임 닫기
+            this.dispose();
+
+        } else {
+            JOptionPane.showMessageDialog(null, "로그인 실패.");
+        }
+    }//GEN-LAST:event_btnLoginActionPerformed
+
+    private void btnReActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReActionPerformed
+        // TODO add your handling code here:
+        cap.generateCaptcha(lblImg);
+        btnLogin.setEnabled(false);
+    }//GEN-LAST:event_btnReActionPerformed
+
+    private void btnAuthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAuthActionPerformed
+        // TODO add your handling code here:
+       // 인증 버튼 클릭 이벤트
+        String userInput = txtauth.getText();
+        if (userInput.equals(cap.getCurrentCaptchaText())) {
+            JOptionPane.showMessageDialog(this, "인증성공!");
+            btnLogin.setEnabled(true);
+
+        } else {
+            JOptionPane.showMessageDialog(this, "인증실패!");
+        }
+    }//GEN-LAST:event_btnAuthActionPerformed
 
     /**
      * @param args the command line arguments
@@ -283,19 +281,20 @@ public class MainJFrame extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton btnAuth;
+    private javax.swing.JButton btnLogin;
+    private javax.swing.JButton btnRe;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JOptionPane jOptionPane1;
+    private javax.swing.JLabel lblBirth;
     private javax.swing.JLabel lblImg;
+    private javax.swing.JLabel lblInput;
+    private javax.swing.JLabel lblName;
+    private javax.swing.JLabel lblcap;
+    private javax.swing.JTextField txtBirth;
+    private javax.swing.JTextField txtName;
+    private javax.swing.JTextField txtauth;
     // End of variables declaration//GEN-END:variables
 
 
