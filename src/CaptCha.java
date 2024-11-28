@@ -20,42 +20,25 @@ import javax.swing.SwingConstants;
  * @author jun
  */
 public final class CaptCha {
+    private String currentCaptchaText; // 생성된 캡차 텍스트를 저장하는 변수
+    
+    public void generateCaptcha(JLabel lblImg) {
+        
+        // 캡차 텍스트 생성
+        currentCaptchaText = generateRandomText(6);
 
+        // 캡차 이미지를 생성
+        BufferedImage captchaImage = generateCaptchaImage(currentCaptchaText);
 
-    public CaptCha(JLabel lblImg) {
-        // JFrame 생성
-        JFrame frame = new JFrame("Captcha Example");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 200);
-
-        // JLabel 초기화
-        lblImg = new JLabel();
-        lblImg.setHorizontalAlignment(SwingConstants.CENTER);
-        lblImg.setVerticalAlignment(SwingConstants.CENTER);
-
-        // JPanel에 추가
-        JPanel panel = new JPanel();
-        panel.add(lblImg);
-
-        frame.add(panel);
-
-        // 캡차 생성 및 표시
-        resetCaptcha(lblImg);
-
-        frame.setVisible(true);
-    }
-
-    public void resetCaptcha(JLabel lblImg) {
-        // 랜덤 텍스트 생성
-        String captchaText = generateRandomText(6);
-
-        // 텍스트를 이미지로 변환
-        BufferedImage captchaImage = generateCaptchaImage(captchaText);
-
-        // JLabel에 이미지 설정
+        // JLabel에 캡차 이미지 설정
         lblImg.setIcon(new ImageIcon(captchaImage));
+       
+       
     }
 
+    /**
+     * 랜덤한 텍스트를 생성
+     */
     private String generateRandomText(int length) {
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         StringBuilder text = new StringBuilder();
@@ -64,26 +47,29 @@ public final class CaptCha {
         for (int i = 0; i < length; i++) {
             text.append(chars.charAt(random.nextInt(chars.length())));
         }
-
+        
         return text.toString();
     }
 
+    /**
+     * 텍스트를 이미지로 변환
+     */
     private BufferedImage generateCaptchaImage(String text) {
-        int width = 200;
-        int height = 50;
+        int width = 300;  // 캡차 이미지 가로 크기
+        int height = 80;  // 캡차 이미지 세로 크기
 
         // BufferedImage 생성
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = image.createGraphics();
 
-        // 배경 설정
+        // 배경색 설정
         g2d.setColor(Color.WHITE);
         g2d.fillRect(0, 0, width, height);
 
         // 폰트 설정
         g2d.setFont(new Font("Arial", Font.BOLD, 30));
 
-        // 랜덤 색상 및 텍스트 그리기
+        // 텍스트 색상 및 위치 설정
         Random random = new Random();
         for (int i = 0; i < text.length(); i++) {
             g2d.setColor(new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
@@ -93,7 +79,7 @@ public final class CaptCha {
         }
 
         // 노이즈 추가
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 15; i++) {
             g2d.setColor(new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
             int x1 = random.nextInt(width);
             int y1 = random.nextInt(height);
@@ -105,5 +91,7 @@ public final class CaptCha {
         g2d.dispose();
         return image;
     }
-
+    public String getCurrentCaptchaText() {
+        return currentCaptchaText;
+    }
 }
