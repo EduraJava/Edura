@@ -1,6 +1,12 @@
 
 import domain.UserSession;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
+import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -12,15 +18,36 @@ import javax.swing.JOptionPane;
  * @author jun
  */
 public class HomeJFrame extends javax.swing.JFrame {
-   
+    DB_MAN DBM = new DB_MAN();
     /**
      * Creates new form HomeJFrame
      */
-    public HomeJFrame() {
+    public HomeJFrame() throws IOException {
         initComponents();
         namelbl.setText("이름 : " + UserSession.getName());
         birlbl.setText("생년월일 : " + UserSession.getBirth());
+        
+        // 이수 정보 가져오기
+        loadUserCategoryInfo(UserSession.getUser_id());
     }
+    
+    // 이수 정보를 JTextArea에 표시하는 메서드
+    private void loadUserCategoryInfo(int userId) throws IOException {
+        DB_MAN db = new DB_MAN();
+        List<String> categoryInfo = db.getUserCategoryInfo(userId);
+
+        if (!categoryInfo.isEmpty()) {
+            StringBuilder infoText = new StringBuilder();
+            for (String info : categoryInfo) {
+                infoText.append(info).append("\n");
+            }
+            jTextArea1.setText(infoText.toString());
+        } else {
+            jTextArea1.setText("이수 정보가 없습니다.");
+        }
+    }
+    
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -34,11 +61,16 @@ public class HomeJFrame extends javax.swing.JFrame {
         jRadioButtonMenuItem1 = new javax.swing.JRadioButtonMenuItem();
         namelbl = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        actionButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jButton2 = new javax.swing.JButton();
         birlbl = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
         jRadioButtonMenuItem1.setSelected(true);
         jRadioButtonMenuItem1.setText("jRadioButtonMenuItem1");
@@ -51,12 +83,14 @@ public class HomeJFrame extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         jLabel2.setText("[이수시간] ");
 
-        jButton1.setText("문제풀기");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        actionButton.setText("문제풀기");
+        actionButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                actionButtonActionPerformed(evt);
             }
         });
+
+        jScrollPane1.setBorder(null);
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -77,6 +111,16 @@ public class HomeJFrame extends javax.swing.JFrame {
         birlbl.setFont(new java.awt.Font("Helvetica Neue", 0, 18)); // NOI18N
         birlbl.setText("생년월일 :");
 
+        jLabel1.setText("우리 회사 이수 기준");
+
+        jLabel3.setText("1. 직장 내 성희롱 예방교육(연 1회 2시간 이상)");
+
+        jLabel4.setText("2. 직장 내 장애인 인식 개선 교육(연 1회 2시간 이상)");
+
+        jLabel5.setText("3.산업 재해 예방 교육 교육(3개월마다 2시간 ~ 6시간 이상) ");
+
+        jLabel6.setText("4. 개인정보 보호(연 2시간 이상)");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -88,44 +132,81 @@ public class HomeJFrame extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(birlbl)
                             .addComponent(jLabel2)
-                            .addComponent(namelbl)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jButton2)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(namelbl)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButton2))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 411, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel6)))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(157, 157, 157)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(156, 156, 156)
+                        .addComponent(actionButton, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(70, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(19, Short.MAX_VALUE)
-                .addComponent(jButton2)
-                .addGap(12, 12, 12)
-                .addComponent(namelbl)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(birlbl)
-                .addGap(12, 12, 12)
-                .addComponent(jLabel2)
+                .addContainerGap(13, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton2)
+                        .addGap(81, 81, 81))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(namelbl)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(birlbl)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addGap(20, 20, 20))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(actionButton)
+                .addGap(15, 15, 15))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void actionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actionButtonActionPerformed
         // TODO add your handling code here:
-        LinkFrame linkFrame = new LinkFrame();
-        linkFrame.setVisible(true);
+        int userId = UserSession.getUser_id();
+        DB_MAN db = new DB_MAN();
 
-        // 현재 프레임 닫기
-        this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+        
+        try {
+            // 버튼 클릭 가능 여부 확인
+            if (db.isButtonClickableToday(userId)) {
+                db.updateButtonClickDate(userId); // 클릭 날짜 업데이트
+                LinkFrame linkFrame = new LinkFrame();
+                linkFrame.setVisible(true);
+                
+                // 현재 프레임 닫기
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "금일 문제를 푸셨습니다.");
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(HomeJFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_actionButtonActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
@@ -175,16 +256,25 @@ public class HomeJFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new HomeJFrame().setVisible(true);
+                try {
+                    new HomeJFrame().setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(HomeJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton actionButton;
     private javax.swing.JLabel birlbl;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;

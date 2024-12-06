@@ -11,10 +11,10 @@ package domain;
 public class UserSession {
     private static String name; // 사용자 이름
     private static String birth; // 생년월일
-    private static int id;
+    private static int user_id;
 
     public static void setUser(int id, String userName, String userBirth) {
-        id = id;
+        user_id = id;
         name = userName;
         birth = userBirth;
     }
@@ -27,12 +27,12 @@ public class UserSession {
     public static String getBirth() {
         return birth;
     }
-    public static int getId() {
-        return id;
+    public static int getUser_id() {
+        return user_id;
     }
 
     public static void clear() {
-        id = -1;
+        user_id = -1;
         name = null;
         birth = null;
     }
