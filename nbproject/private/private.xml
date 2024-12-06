@@ -3,10 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/Users/jun/NetBeansProjects/Edura/src/QuizFrame.java</file>
+            <file>file:/Users/jun/NetBeansProjects/Edura/src/AnswerFrame.java</file>
+            <file>file:/Users/jun/NetBeansProjects/Edura/src/domain/Question.java</file>
             <file>file:/Users/jun/NetBeansProjects/Edura/src/DB_MAN.java</file>
             <file>file:/Users/jun/NetBeansProjects/Edura/src/MainJFrame.java</file>
             <file>file:/Users/jun/NetBeansProjects/Edura/src/CaptCha.java</file>
             <file>file:/Users/jun/NetBeansProjects/Edura/src/HomeJFrame.java</file>
+            <file>file:/Users/jun/NetBeansProjects/Edura/src/LinkFrame.java</file>
         </group>
     </open-files>
 </project-private>

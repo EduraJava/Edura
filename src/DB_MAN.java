@@ -44,40 +44,41 @@ public class DB_MAN {
         }
     }
 
-   // 이름과 생년월일 검증하는 메서드
-    public boolean isValidUser(String name, String birth) {
-        boolean isValid = false; // 기본적으로 유효하지 않은 사용자로 설정
-        try {
-            dbOpen(); // 데이터베이스 연결 열기
+    
+    // id를 찾는 메서드
+    public int findUserId(String name, String birth) {
+    int userId = -1; // 기본값으로 -1을 설정 (찾지 못한 경우)
+    try {
+        dbOpen(); // 데이터베이스 연결 열기
 
-            // SQL 쿼리 작성
-            String query = "SELECT COUNT(*) AS userCount FROM user WHERE name = ? AND birth = ?";
-            PreparedStatement pstmt = DB_con.prepareStatement(query);
-            pstmt.setString(1, name); // 첫 번째 파라미터에 이름 설정
-            pstmt.setString(2, birth); // 두 번째 파라미터에 생년월일 설정
+        // SQL 쿼리 작성
+        String query = "SELECT id FROM user WHERE name = ? AND birth = ?";
+        PreparedStatement pstmt = DB_con.prepareStatement(query);
+        pstmt.setString(1, name); // 첫 번째 파라미터에 이름 설정
+        pstmt.setString(2, birth); // 두 번째 파라미터에 생년월일 설정
 
-            // 쿼리 실행 및 결과 처리
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                int userCount = rs.getInt(query);
-                isValid = userCount > 0; // 일치하는 사용자가 있으면 true 반환
-            }
-            rs.close();
-            pstmt.close();
-        } catch (SQLException e) {
-            System.out.println("로그인 검증 중 SQLException 발생");
-            e.printStackTrace();
-        } catch (Exception e) {
-            System.out.println("로그인 검증 중 기타 예외 발생");
-            e.printStackTrace();
-        } finally {
-            try {
-                dbClose(); // 데이터베이스 연결 닫기
-            } catch (Exception e) {
-                System.out.println("DB 연결 종료 중 오류 발생");
-                e.printStackTrace();
-            }
+        // 쿼리 실행 및 결과 처리
+        ResultSet rs = pstmt.executeQuery();
+        if (rs.next()) {
+            userId = rs.getInt("id"); // id 값 가져오기
         }
-        return isValid;
+
+        rs.close();
+        pstmt.close();
+    } catch (SQLException e) {
+        System.out.println("사용자 ID 찾기 중 SQLException 발생");
+        e.printStackTrace();
+    } catch (Exception e) {
+        System.out.println("사용자 ID 찾기 중 기타 예외 발생");
+        e.printStackTrace();
+    } finally {
+        try {
+            dbClose(); // 데이터베이스 연결 닫기
+        } catch (Exception e) {
+            System.out.println("DB 연결 종료 중 오류 발생");
+            e.printStackTrace();
+        }
     }
+    return userId; // 사용자 ID 반환
+}
 }
