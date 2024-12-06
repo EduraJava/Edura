@@ -1,4 +1,5 @@
 
+import domain.UserSession;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Desktop;
@@ -29,7 +30,6 @@ import javax.swing.SwingConstants;
  */
 public class MainJFrame extends javax.swing.JFrame {
     CaptCha cap = new CaptCha(); // 캡챠 기능 수행 
-    String strSQL = ""; // 쿼리 작성 변수
     
     DB_MAN DBM = new DB_MAN();
 
@@ -42,7 +42,7 @@ public class MainJFrame extends javax.swing.JFrame {
         initComponents();
         cap.generateCaptcha(lblImg); // 캡챠 이미지 만들어 넣음  
         btnLogin.setEnabled(false);  // 로그인버튼 캡챠 인증 전에는 안 열리게 구현
-        
+//     
         // db 조회 메서드. 일단 중지
         try {
             DBM.dbOpen();
@@ -205,13 +205,15 @@ public class MainJFrame extends javax.swing.JFrame {
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
-        String nameValue = lblName.getText();
-        String birthValue = lblBirth.getText();
-       
-
-        if (DBM.isValidUser(nameValue, birthValue)) {
-            // 데이터 끌고와서 보내주는 코드 필요
+        String nameValue = txtName.getText();
+        String birthValue = txtBirth.getText();
+        
+        int userId = DBM.findUserId(nameValue, birthValue);
+        if (userId != -1) {
+            UserSession.setUser(userId, nameValue, birthValue); // 세션 관리
+            
             // HomeJFrame 열기
+            JOptionPane.showMessageDialog(null, "로그인 성공!.");
             HomeJFrame homeFrame = new HomeJFrame();
             homeFrame.setVisible(true);
 
