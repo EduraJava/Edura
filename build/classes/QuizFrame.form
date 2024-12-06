@@ -31,7 +31,11 @@
               <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                  <Component id="submitbutton" min="-2" pref="105" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Component id="submitbutton" min="-2" pref="105" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="homeButton" min="-2" pref="103" max="-2" attributes="0"/>
+                  </Group>
                   <Component id="q3" min="-2" max="-2" attributes="0"/>
                   <Component id="q2" min="-2" max="-2" attributes="0"/>
                   <Component id="q1" min="-2" max="-2" attributes="0"/>
@@ -65,7 +69,10 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="q4" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-              <Component id="submitbutton" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="submitbutton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="homeButton" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
               <EmptySpace pref="34" max="32767" attributes="0"/>
@@ -97,6 +104,9 @@
     </Component>
     <Component class="javax.swing.JRadioButton" name="q1">
       <Properties>
+        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+          <ComponentRef name="buttonGroup1"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="jRadioButton1"/>
       </Properties>
       <Events>
@@ -105,16 +115,25 @@
     </Component>
     <Component class="javax.swing.JRadioButton" name="q2">
       <Properties>
+        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+          <ComponentRef name="buttonGroup1"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="jRadioButton2"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JRadioButton" name="q3">
       <Properties>
+        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+          <ComponentRef name="buttonGroup1"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="jRadioButton3"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JRadioButton" name="q4">
       <Properties>
+        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+          <ComponentRef name="buttonGroup1"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="jRadioButton4"/>
       </Properties>
     </Component>
@@ -122,6 +141,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="&#xc81c;&#xcd9c;"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="submitbuttonActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
@@ -135,6 +157,14 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JSeparator" name="jSeparator2">
+    </Component>
+    <Component class="javax.swing.JButton" name="homeButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="&#xd648;&#xc73c;&#xb85c; &#xac00;&#xae30;"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="homeButtonActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

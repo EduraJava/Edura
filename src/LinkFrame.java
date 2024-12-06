@@ -39,13 +39,13 @@ public class LinkFrame extends javax.swing.JFrame {
             else if( day.equals("화요일")) {
                 edu = "장애인 인식 개선 교육";
             } 
-            // 목요일은 직장 내 따돌림 예방 교육
+            // 목요일은 산업 재해 예방 교육 
             else if (day.equals("목요일")) {
-                edu = "직장 내 따돌림 예방 교육";
-            }
-            // 금요일은 산업 재해 예방 교육 
-            else {
                 edu = "산업 재해 예방 교육";
+            }
+            // 금요일은 개인 정보 보호 교육
+            else {
+                edu = "개인 정보 보호 교육";
             }
         
         } catch (Exception ex) {
@@ -170,13 +170,13 @@ public class LinkFrame extends javax.swing.JFrame {
             } 
             // 목요일은 직장 내 따돌림 예방 교육
             else if (day.equals("목요일")) {
-                edu = "직장 내 따돌림 예방 교육";
-                Desktop.getDesktop().browse(new URI("https://www.youtube.com/watch?v=zFA1puJa24o&list=PLjN7ShteQfYT7bUCQ9LLjKW5j7Zl7p-YU&index=6"));
+                edu = "산업 재해 예방 교육";
+                Desktop.getDesktop().browse(new URI("https://www.youtube.com/watch?v=glXV9-zDaKU&list=PLPhfWH-cPSSwQT17BayJnm7bo5P-iyVtJ&index=2"));
             }
             // 금요일은 산업 재해 예방 교육 
             else {
-                edu = "산업 재해 예방 교육";
-                Desktop.getDesktop().browse(new URI("https://www.youtube.com/watch?v=glXV9-zDaKU&list=PLPhfWH-cPSSwQT17BayJnm7bo5P-iyVtJ&index=2"));
+                edu = "개인 정보 보호 교육";
+                Desktop.getDesktop().browse(new URI("https://www.youtube.com/watch?v=TMQEK5MAwFE&list=PLCl4Lezj1nFWSkduF-4lV_gcNg6vOz_nt"));
             }
         
         } catch (Exception ex) {

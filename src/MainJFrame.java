@@ -10,7 +10,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -212,9 +215,16 @@ public class MainJFrame extends javax.swing.JFrame {
         if (userId != -1) {
             UserSession.setUser(userId, nameValue, birthValue); // 세션 관리
             
+            
+            
             // HomeJFrame 열기
             JOptionPane.showMessageDialog(null, "로그인 성공!.");
-            HomeJFrame homeFrame = new HomeJFrame();
+            HomeJFrame homeFrame = null;
+            try {
+                homeFrame = new HomeJFrame();
+            } catch (IOException ex) {
+                Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
             homeFrame.setVisible(true);
 
             // 현재 프레임 닫기
