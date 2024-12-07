@@ -213,22 +213,28 @@ public class MainJFrame extends javax.swing.JFrame {
         
         int userId = DBM.findUserId(nameValue, birthValue);
         if (userId != -1) {
-            UserSession.setUser(userId, nameValue, birthValue); // 세션 관리
-            
-            
-            
-            // HomeJFrame 열기
-            JOptionPane.showMessageDialog(null, "로그인 성공!.");
-            HomeJFrame homeFrame = null;
-            try {
-                homeFrame = new HomeJFrame();
-            } catch (IOException ex) {
-                Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            if (nameValue.equals("root")) {
+                RegisterJFrame registerJFrame = new RegisterJFrame();
+                registerJFrame.setVisible(true);
+                this.dispose();
             }
-            homeFrame.setVisible(true);
+            else {
+                 UserSession.setUser(userId, nameValue, birthValue); // 세션 관리
+            
+            
+                // HomeJFrame 열기
+                JOptionPane.showMessageDialog(null, "로그인 성공!.");
+                HomeJFrame homeFrame = null;
+                try {
+                    homeFrame = new HomeJFrame();
+                } catch (IOException ex) {
+                    Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                homeFrame.setVisible(true);
 
-            // 현재 프레임 닫기
-            this.dispose();
+                // 현재 프레임 닫기
+                this.dispose();
+            }
 
         } else {
             JOptionPane.showMessageDialog(null, "로그인 실패.");
