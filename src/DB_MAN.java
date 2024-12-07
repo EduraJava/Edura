@@ -86,6 +86,32 @@ public class DB_MAN {
         return userId; // 사용자 ID 반환
     }
     
+    public boolean saveUser(String name, String birth) {
+        try {
+            dbOpen(); 
+
+            // SQL 쿼리 작성
+            String insertQuery = "INSERT INTO user (name, birth) VALUES (?, ?)";
+            PreparedStatement pstmt = DB_con.prepareStatement(insertQuery);
+            pstmt.setString(1, name); 
+            pstmt.setString(2, birth);
+            int rowsAffected = pstmt.executeUpdate();
+
+            pstmt.close();
+            dbClose(); 
+
+            return rowsAffected > 0; 
+        } catch (SQLException e) {
+            System.out.println("사용자 등록 중 SQLException 발생");
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("사용자 등록 중 기타 예외 발생");
+            e.printStackTrace();
+        }
+
+        return false; 
+    }
+    
     // 유저 카테고리를 찾아 이수 시간을 보여주는 메서드 
     public List<String> getUserCategoryInfo(int userId) throws IOException {
         List<String> categoryInfo = new ArrayList<>();
