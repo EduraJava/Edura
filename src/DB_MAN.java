@@ -21,7 +21,7 @@ public class DB_MAN {
     String strURL = "jdbc:mysql://localhost:3306/Edura?serverTimezone=Asia/Seoul&characterEncoding=UTF-8";
 //    String strURL = "jdbc:mysql://10.70.41.80:3306/mydb?characterEncoding=UTF-8&serverTimezone=UTC";
     String user = "root";  // MySQL 사용자 이름
-    String password = "rootpw";  // MySQL 사용자 비밀번호
+    String password = "";  // MySQL 사용자 비밀번호
     
     Connection DB_con;  // DB Connection 객체
     Statement DB_stmt;  // Statement 객체
