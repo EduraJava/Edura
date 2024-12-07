@@ -214,8 +214,8 @@ public class MainJFrame extends javax.swing.JFrame {
         int userId = DBM.findUserId(nameValue, birthValue);
         if (userId != -1) {
             if (nameValue.equals("root")) {
-                RegisterJFrame registerJFrame = new RegisterJFrame();
-                registerJFrame.setVisible(true);
+                UserManagerJFrame userManagerJFrame = new UserManagerJFrame();
+                userManagerJFrame.setVisible(true);
                 this.dispose();
             }
             else {
