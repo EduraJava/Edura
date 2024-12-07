@@ -8,11 +8,11 @@ import javax.swing.*;
  *
  * @author sujy0
  */
-public class RegisterJFrame extends javax.swing.JFrame {
+public class UserManagerJFrame extends javax.swing.JFrame {
 
     DB_MAN DBM = new DB_MAN();
 
-    public RegisterJFrame() {
+    public UserManagerJFrame() {
         initComponents();
         DBM = new DB_MAN();      
     }
@@ -30,9 +30,10 @@ public class RegisterJFrame extends javax.swing.JFrame {
         lblName = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
         lblBirth = new javax.swing.JLabel();
-        textBirth = new javax.swing.JTextField();
+        txtBirth = new javax.swing.JTextField();
         btnRegister = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        btnDelete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -51,13 +52,22 @@ public class RegisterJFrame extends javax.swing.JFrame {
 
         jLabel1.setText("(YYYYMMdd)");
 
+        btnDelete.setText("삭제");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(132, 132, 132)
+                .addGap(74, 74, 74)
                 .addComponent(btnRegister)
+                .addGap(18, 18, 18)
+                .addComponent(btnDelete)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -74,7 +84,7 @@ public class RegisterJFrame extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(lblBirth)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(textBirth, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(txtBirth, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel1)))
                 .addGap(0, 52, Short.MAX_VALUE))
@@ -91,11 +101,13 @@ public class RegisterJFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(textBirth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtBirth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(lblBirth))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
-                .addComponent(btnRegister)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRegister)
+                    .addComponent(btnDelete))
                 .addGap(21, 21, 21))
         );
 
@@ -104,7 +116,7 @@ public class RegisterJFrame extends javax.swing.JFrame {
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
         String name = txtName.getText().trim();
-        String birth = textBirth.getText().trim();
+        String birth = txtBirth.getText().trim();
 
         // 이름과 생년월일이 비어 있는지 확인
         if (name.isEmpty() && birth.isEmpty()) {
@@ -148,6 +160,45 @@ public class RegisterJFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnRegisterActionPerformed
 
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        String name = txtName.getText().trim();
+        String birth = txtBirth.getText().trim();
+
+        if (name.isEmpty() || birth.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "이름과 생년월일을 입력하세요.");
+            return;
+        }
+
+        if (!birth.matches("\\d{8}")) {
+            JOptionPane.showMessageDialog(this, "생년월일은 YYYYMMDD 형식으로 입력해야 합니다.");
+            return;
+        }
+
+        // 삭제 확인 메시지
+        int confirm = JOptionPane.showConfirmDialog(
+            this, 
+            "정말 삭제하시겠습니까?", 
+            "삭제 확인", 
+            JOptionPane.YES_NO_OPTION, 
+            JOptionPane.WARNING_MESSAGE
+        );
+
+        if (confirm != JOptionPane.YES_OPTION) {
+            return; // 사용자가 "아니오"를 선택하면 삭제 중단
+        }
+
+        try {
+            if (DBM.deleteUser(name, birth)) {
+                JOptionPane.showMessageDialog(this, "사용자가 삭제되었습니다.");
+            } else {
+                JOptionPane.showMessageDialog(this, "삭제할 사용자를 찾을 수 없습니다.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "삭제 중 오류가 발생했습니다: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -165,18 +216,19 @@ public class RegisterJFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new RegisterJFrame().setVisible(true);
+                new UserManagerJFrame().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnRegister;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblBirth;
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblTitle;
-    private javax.swing.JTextField textBirth;
+    private javax.swing.JTextField txtBirth;
     private javax.swing.JTextField txtName;
     // End of variables declaration//GEN-END:variables
 }
